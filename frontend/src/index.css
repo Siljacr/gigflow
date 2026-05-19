@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-surface text-white antialiased;
+    font-family: 'Syne', system-ui, sans-serif;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-surface-secondary;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-surface-border rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-brand-600;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-surface-secondary border border-surface-border rounded-xl;
+  }
+
+  .btn-primary {
+    @apply bg-brand-600 hover:bg-brand-500 text-white font-semibold px-4 py-2 rounded-lg
+    transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed
+    disabled:active:scale-100;
+  }
+
+  .btn-secondary {
+    @apply bg-surface-tertiary hover:bg-surface-border text-white font-medium px-4 py-2 rounded-lg
+    border border-surface-border transition-all duration-200 active:scale-95;
+  }
+
+  .btn-danger {
+    @apply bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-600/30 font-medium
+    px-4 py-2 rounded-lg transition-all duration-200 active:scale-95;
+  }
+
+  .input {
+    @apply bg-surface-tertiary border border-surface-border text-white placeholder-gray-500
+    rounded-lg px-3 py-2 w-full transition-colors duration-200
+    focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30;
+  }
+
+  .label {
+    @apply text-sm font-medium text-gray-400 mb-1 block;
+  }
+
+  .badge-new {
+    @apply bg-blue-500/15 text-blue-400 border border-blue-500/30;
+  }
+
+  .badge-contacted {
+    @apply bg-yellow-500/15 text-yellow-400 border border-yellow-500/30;
+  }
+
+  .badge-qualified {
+    @apply bg-green-500/15 text-green-400 border border-green-500/30;
+  }
+
+  .badge-lost {
+    @apply bg-red-500/15 text-red-400 border border-red-500/30;
+  }
+
+  .badge {
+    @apply text-xs font-semibold px-2.5 py-0.5 rounded-full border uppercase tracking-wide;
+  }
+}
