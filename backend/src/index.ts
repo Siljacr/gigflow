@@ -1,8 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import connectDB from './config/database';
 
+import connectDB from './config/database';
 import authRoutes from './routes/authRoutes';
 import leadRoutes from './routes/leadRoutes';
 
@@ -23,47 +23,41 @@ app.use(
 );
 
 /**
- * Health Check Route (VERY IMPORTANT)
+ * Health check (IMPORTANT)
  */
 app.get('/health', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'GigFlow Backend is running',
-  });
+  res.status(200).json({ status: 'ok' });
 });
 
 /**
- * API Routes
+ * Routes
  */
 app.use('/api/auth', authRoutes);
 app.use('/api/leads', leadRoutes);
 
 /**
- * Root Route (optional but useful)
+ * Root route
  */
 app.get('/', (req, res) => {
-  res.json({
-    success: true,
-    message: 'GigFlow API Running',
-  });
+  res.json({ message: 'GigFlow API running' });
 });
 
 /**
- * Start Server AFTER DB connection
+ * Start server
  */
 const PORT = process.env.PORT || 5000;
 
-const startServer = async () => {
+const start = async () => {
   try {
     await connectDB();
 
     app.listen(PORT, () => {
-      console.log(`🚀 GigFlow API running on port ${PORT}`);
+      console.log(`Server running on port ${PORT}`);
     });
-  } catch (error) {
-    console.error('❌ MongoDB connection error:', error);
+  } catch (err) {
+    console.error('MongoDB connection error:', err);
     process.exit(1);
   }
 };
 
-startServer();
+start();
