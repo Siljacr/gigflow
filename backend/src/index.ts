@@ -10,9 +10,6 @@ dotenv.config();
 
 const app = express();
 
-/**
- * Middlewares
- */
 app.use(express.json());
 
 app.use(
@@ -22,29 +19,20 @@ app.use(
   })
 );
 
-/**
- * Health check (IMPORTANT)
- */
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok' });
+// health check
+app.get('/health', (_req, res) => {
+  res.json({ status: 'ok' });
 });
 
-/**
- * Routes
- */
+// routes
 app.use('/api/auth', authRoutes);
 app.use('/api/leads', leadRoutes);
 
-/**
- * Root route
- */
-app.get('/', (req, res) => {
+// root
+app.get('/', (_req, res) => {
   res.json({ message: 'GigFlow API running' });
 });
 
-/**
- * Start server
- */
 const PORT = process.env.PORT || 5000;
 
 const start = async () => {
@@ -52,10 +40,10 @@ const start = async () => {
     await connectDB();
 
     app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+      console.log(`🚀 Server running on ${PORT}`);
     });
   } catch (err) {
-    console.error('MongoDB connection error:', err);
+    console.error('DB connection error:', err);
     process.exit(1);
   }
 };
