@@ -1,261 +1,144 @@
 # GigFlow – Smart Leads Dashboard
 
-A full-stack Lead Management Dashboard built with the MERN stack and TypeScript. Manage leads, track their pipeline stage, filter/search across multiple dimensions, and export data — all with role-based access control.
+GigFlow is a full-stack Lead Management Dashboard built using the MERN stack with TypeScript. The application helps users manage leads, track lead status, apply advanced filters, and export lead data with secure authentication and role-based access control.
+
+---
+
+## Live Demo
+
+Frontend: https://gigflow-kappa-ten.vercel.app
+
+Backend: https://gigflow-ng5v.onrender.com
+
+Demo Video:  
+https://drive.google.com/file/d/1DmxO_hd-EX3AJwRjc3KhxfTs7x5Ej6uS/view?usp=sharing
 
 ---
 
 ## Tech Stack
 
-| Layer | Tech |
-|---|---|
-| Frontend | React 18, TypeScript, TailwindCSS, Vite |
-| State | Zustand (auth), TanStack Query v5 (server state) |
-| Backend | Node.js, Express, TypeScript |
-| Database | MongoDB + Mongoose |
-| Auth | JWT + bcryptjs |
-| Containerisation | Docker + Docker Compose |
+### Frontend
+- React.js
+- TypeScript
+- TailwindCSS
+- Vite
+
+### Backend
+- Node.js
+- Express.js
+- TypeScript
+- MongoDB Atlas
+- Mongoose
+
+### Other Tools
+- JWT Authentication
+- bcryptjs
+- Zustand
+- React Query
+- Docker
 
 ---
 
 ## Features
 
-### Core
-- **JWT Authentication** — register, login, protected routes, token persistence
-- **Role-Based Access Control** — Admin sees all leads; Sales users see only their own
-- **Lead CRUD** — create, read, update, delete with full validation
-- **Advanced Filtering** — filter by status, source, combined with search; all filters compose
-- **Debounced Search** — 400ms debounce on name/email search
-- **Backend Pagination** — `skip/limit` with metadata (`total`, `totalPages`, `hasNextPage`)
-- **CSV Export** — respects active filters; streams file download
-- **Lead Stats** — aggregated breakdown by status and source on the dashboard
-
-### UI/UX
-- Dark theme with custom design system (Syne font, brand blue palette)
-- Responsive layout
-- Loading states (skeleton spinners, opacity fade during refetch)
-- Empty states with contextual messaging
-- Form validation with inline error messages
-- Confirm dialogs for destructive actions
-- Toast notifications for all mutations
+- User Registration & Login
+- JWT Authentication
+- Protected Routes
+- Role-Based Access Control (Admin / Sales)
+- Lead CRUD Operations
+- Advanced Filtering & Search
+- Debounced Search
+- Backend Pagination
+- CSV Export
+- Responsive Dashboard UI
+- Loading & Error States
+- Docker Setup
 
 ---
 
-## Project Structure
+## Project Setup
 
-```
-gigflow/
-├── backend/
-│   ├── src/
-│   │   ├── config/        # DB connection, env config
-│   │   ├── controllers/   # authController, leadController
-│   │   ├── middleware/    # auth (JWT), errorHandler, validate
-│   │   ├── models/        # User, Lead (Mongoose)
-│   │   ├── routes/        # authRoutes, leadRoutes
-│   │   ├── types/         # Shared TypeScript interfaces
-│   │   ├── utils/         # response helpers, jwt, csv
-│   │   └── index.ts       # Express app entry
-│   ├── Dockerfile
-│   ├── package.json
-│   └── tsconfig.json
-│
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── layout/    # Layout, sidebar nav
-│   │   │   ├── leads/     # LeadForm, LeadTable, LeadFilters, LeadDetail
-│   │   │   └── ui/        # Badge, Modal, Spinner, ConfirmDialog
-│   │   ├── hooks/         # useDebounce, useLeads (React Query)
-│   │   ├── pages/         # LoginPage, RegisterPage, DashboardPage, LeadsPage
-│   │   ├── services/      # api.ts (axios), authService, leadService
-│   │   ├── store/         # authStore (Zustand + persist)
-│   │   ├── types/         # Shared frontend types
-│   │   └── App.tsx        # Router + protected/public routes
-│   ├── Dockerfile
-│   ├── package.json
-│   └── vite.config.ts
-│
-├── docker-compose.yml
-├── .env.example
-└── README.md
-```
-
----
-
-## Local Setup (Without Docker)
-
-### Prerequisites
-- Node.js 18+
-- MongoDB running locally (or a MongoDB Atlas URI)
-
-### 1. Clone & install
+### Clone Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/gigflow.git
+git clone https://github.com/Siljacr/gigflow.git
 cd gigflow
 ```
 
-### 2. Backend
+---
+
+## Backend Setup
 
 ```bash
 cd backend
-cp .env.example .env
-# Edit .env — set MONGODB_URI and JWT_SECRET
 npm install
-npm run dev      # starts on http://localhost:5000
+npm run dev
 ```
 
-### 3. Frontend
+Backend runs on:
+
+```bash
+http://localhost:5000
+```
+
+---
+
+## Frontend Setup
 
 ```bash
 cd frontend
 npm install
-npm run dev      # starts on http://localhost:3000
+npm run dev
 ```
 
----
-
-## Docker Setup
+Frontend runs on:
 
 ```bash
-# From the project root
-cp .env.example .env
-# Edit .env — set JWT_SECRET at minimum
-
-docker-compose up --build
+http://localhost:3000
 ```
-
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:5000
-- Health check: http://localhost:5000/health
 
 ---
 
 ## Environment Variables
 
-### Backend (`backend/.env`)
+### Backend (.env)
 
-| Variable | Required | Default | Description |
-|---|---|---|---|
-| `PORT` | No | `5000` | Server port |
-| `NODE_ENV` | No | `development` | Environment |
-| `MONGODB_URI` | Yes | — | MongoDB connection string |
-| `JWT_SECRET` | Yes | — | Min 32-char secret for signing JWTs |
-| `JWT_EXPIRES_IN` | No | `7d` | Token expiry duration |
-| `CORS_ORIGIN` | No | `http://localhost:3000` | Allowed frontend origin |
+```env
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+CORS_ORIGIN=http://localhost:3000
+```
 
-### Frontend (`frontend/.env`)
+### Frontend (.env)
 
-| Variable | Required | Default | Description |
-|---|---|---|---|
-| `VITE_API_URL` | No | `/api` | Backend API base URL |
+```env
+VITE_API_URL=http://localhost:5000/api
+```
 
 ---
 
-## API Documentation
+## API Routes
 
-All responses follow this shape:
-```json
-{
-  "success": true,
-  "message": "...",
-  "data": { ... },
-  "meta": { "total": 42, "page": 1, "limit": 10, "totalPages": 5, "hasNextPage": true, "hasPrevPage": false }
-}
-```
-
-### Auth
-
-| Method | Endpoint | Auth | Body | Description |
-|---|---|---|---|---|
-| POST | `/api/auth/register` | ❌ | `{ name, email, password, role? }` | Register user |
-| POST | `/api/auth/login` | ❌ | `{ email, password }` | Login |
-| GET | `/api/auth/me` | ✅ | — | Get current user |
+### Authentication
+- POST /api/auth/register
+- POST /api/auth/login
 
 ### Leads
-
-| Method | Endpoint | Auth | Role | Description |
-|---|---|---|---|---|
-| GET | `/api/leads` | ✅ | any | List leads (paginated, filtered) |
-| POST | `/api/leads` | ✅ | any | Create lead |
-| GET | `/api/leads/stats` | ✅ | any | Get lead stats |
-| GET | `/api/leads/export` | ✅ | any | Export CSV |
-| GET | `/api/leads/:id` | ✅ | any | Get single lead |
-| PUT | `/api/leads/:id` | ✅ | any | Update lead |
-| DELETE | `/api/leads/:id` | ✅ | any | Delete lead |
-
-#### Query Parameters for `GET /api/leads`
-
-| Param | Type | Values | Description |
-|---|---|---|---|
-| `page` | number | ≥1 | Page number (default: 1) |
-| `limit` | number | 1–100 | Results per page (default: 10) |
-| `status` | string | `New` \| `Contacted` \| `Qualified` \| `Lost` | Filter by status |
-| `source` | string | `Website` \| `Instagram` \| `Referral` | Filter by source |
-| `search` | string | any | Regex search on name and email |
-| `sort` | string | `latest` \| `oldest` | Sort by createdAt |
-
----
-
-## Role-Based Access Control
-
-| Action | Admin | Sales |
-|---|---|---|
-| View all leads | ✅ | ❌ (own only) |
-| Create lead | ✅ | ✅ |
-| Update any lead | ✅ | ❌ (own only) |
-| Delete any lead | ✅ | ❌ (own only) |
-| Export CSV | ✅ (all) | ✅ (own only) |
-| View stats | ✅ (all) | ✅ (own only) |
-
----
-
-## Lead Schema
-
-```typescript
-{
-  name:      string        // 2–100 chars, required
-  email:     string        // valid email, required
-  status:    'New' | 'Contacted' | 'Qualified' | 'Lost'
-  source:    'Website' | 'Instagram' | 'Referral'
-  notes?:    string        // max 500 chars, optional
-  createdBy: ObjectId      // ref: User
-  createdAt: Date
-  updatedAt: Date
-}
-```
-
----
-
-## TypeScript Highlights
-
-- `strict: true` in both `tsconfig.json` files
-- Zero usage of `any` — all types explicitly defined
-- Shared interfaces for `IUser`, `ILead`, `ApiResponse<T>`, `PaginationMeta`, `JwtPayload`
-- Generic `sendSuccess<T>` and `sendError` response utilities
-- Type-safe Mongoose documents via `IUserDocument` and `ILeadDocument` interfaces
-- Frontend: full typing of all API responses, Zustand store, React Query hooks
+- GET /api/leads
+- POST /api/leads
+- PUT /api/leads/:id
+- DELETE /api/leads/:id
 
 ---
 
 ## Deployment
 
-### Backend → Render / Railway
-1. Set environment variables in the dashboard
-2. Build command: `npm run build`
-3. Start command: `node dist/index.js`
-
-### Frontend → Vercel / Netlify
-1. Set `VITE_API_URL` to your backend URL
-2. Build command: `npm run build`
-3. Output directory: `dist`
+- Frontend deployed on Vercel
+- Backend deployed on Render
 
 ---
 
-## Git Commit Convention
+## Author
 
-```
-feat: add CSV export with active filters
-fix: role check on lead update endpoint
-chore: add docker-compose healthchecks
-refactor: extract pagination meta to utility
-```
+Silja CR
